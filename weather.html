@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Forecast - AgriSense</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="stylesheet" href="./css/weather.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div id="loading-overlay" class="loading-overlay">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Loading weather data...</span>
+      </div>
+    </div>
+
+    <header>
+      <div class="container">
+        <div class="logo">
+          <img
+            src="./images/logo agri.png"
+            alt="AgriSense Logo"
+            width="100px"
+            height="50px"
+          />
+          <h1>AgriSense</h1>
+        </div>
+        <nav>
+          <ul>
+            <li>
+              <a href="./index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li>
+              <a href="./dashboard.html"
+                ><i class="fas fa-chart-line"></i> Dashboard</a
+              >
+            </li>
+            <li>
+              <a href="./dashboard.html" class="active"
+                ><i class="fas fa-cloud-sun"></i> Weather</a
+              >
+            </li>
+            <li>
+              <a href="./alerts.html"><i class="fas fa-bell"></i> Alerts</a>
+            </li>
+            <li>
+              <a href="./resources.html"
+                ><i class="fas fa-book"></i> Resources</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div class="language-selector">
+          <select id="language">
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+            <option value="ta">தமிழ்</option>
+            <option value="bn">বাংলা</option>
+          </select>
+        </div>
+      </div>
+    </header>
+
+    <section class="weather-header">
+      <div class="container">
+        <div class="weather-title">
+          <h1>Weather Forecast</h1>
+          <p>7-day weather predictions for your farm location</p>
+        </div>
+        <div class="location-selector">
+          <div class="current-location">
+            <i class="fas fa-map-marker-alt"></i>
+            <span id="current-location">Amritsar, Punjab</span>
+          </div>
+          <button class="btn btn-secondary" id="change-location">
+            <i class="fas fa-search-location"></i> Change Location
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="current-weather">
+      <div class="container">
+        <div class="weather-overview">
+          <div class="weather-now">
+            <div class="weather-icon">
+              <i class="fas fa-sun"></i>
+            </div>
+            <div class="temperature">
+              <span id="current-temp">28°C</span>
+            </div>
+            <div class="weather-desc">
+              <span id="weather-condition">Sunny</span>
+            </div>
+          </div>
+          <div class="weather-details">
+            <div class="weather-detail-item">
+              <div class="detail-icon">
+                <i class="fas fa-tint"></i>
+              </div>
+              <div class="detail-info">
+                <span class="detail-label">Humidity</span>
+                <span class="detail-value" id="humidity">45%</span>
+              </div>
+            </div>
+            <div class="weather-detail-item">
+              <div class="detail-icon">
+                <i class="fas fa-wind"></i>
+              </div>
+              <div class="detail-info">
+                <span class="detail-label">Wind Speed</span>
+                <span class="detail-value" id="wind-speed">10 km/h</span>
+              </div>
+            </div>
+            <div class="weather-detail-item">
+              <div class="detail-icon">
+                <i class="fas fa-cloud-rain"></i>
+              </div>
+              <div class="detail-info">
+                <span class="detail-label">Precipitation</span>
+                <span class="detail-value" id="precipitation">0%</span>
+              </div>
+            </div>
+            <div class="weather-detail-item">
+              <div class="detail-icon">
+                <i class="fas fa-compress-arrows-alt"></i>
+              </div>
+              <div class="detail-info">
+                <span class="detail-label">Pressure</span>
+                <span class="detail-value" id="pressure">1012 hPa</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="weather-impact">
+          <h3>Agricultural Impact</h3>
+          <div class="impact-item favorable">
+            <div class="impact-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="impact-text">
+              <span>Favorable conditions for wheat growth</span>
+            </div>
+          </div>
+          <div class="impact-item warning">
+            <div class="impact-icon">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="impact-text">
+              <span
+                >Low rainfall may require irrigation in the next 3 days</span
+              >
+            </div>
+          </div>
+          <div class="impact-item favorable">
+            <div class="impact-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="impact-text">
+              <span>Good conditions for spraying fertilizers today</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="forecast-charts">
+      <div class="container">
+        <div class="chart-tabs">
+          <button class="chart-tab active" data-chart="temperature">
+            Temperature
+          </button>
+          <button class="chart-tab" data-chart="rainfall">Rainfall</button>
+          <button class="chart-tab" data-chart="wind">Wind Speed</button>
+        </div>
+
+        <div class="chart-container active" id="temperature-chart-container">
+          <h3>Temperature Forecast (°C)</h3>
+          <div class="chart-wrapper">
+            <canvas id="temperatureForecastChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <span class="legend-color max-temp"></span>
+              <span>Max Temperature</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color min-temp"></span>
+              <span>Min Temperature</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color avg-temp"></span>
+              <span>Avg Temperature</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container" id="rainfall-chart-container">
+          <h3>Rainfall Forecast (mm)</h3>
+          <div class="chart-wrapper">
+            <canvas id="rainfallForecastChart"></canvas>
+          </div>
+          <div class="rainfall-probability">
+            <h4>Probability of Precipitation</h4>
+            <div class="probability-bar">
+              <div class="probability-labels">
+                <span>Today</span>
+                <span>+1</span>
+                <span>+2</span>
+                <span>+3</span>
+                <span>+4</span>
+                <span>+5</span>
+                <span>+6</span>
+              </div>
+              <div class="probability-values">
+                <div class="probability-value" style="height: 10%">10%</div>
+                <div class="probability-value" style="height: 30%">30%</div>
+                <div class="probability-value" style="height: 60%">60%</div>
+                <div class="probability-value" style="height: 80%">80%</div>
+                <div class="probability-value" style="height: 50%">50%</div>
+                <div class="probability-value" style="height: 20%">20%</div>
+                <div class="probability-value" style="height: 10%">10%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container" id="wind-chart-container">
+          <h3>Wind Speed Forecast (km/h)</h3>
+          <div class="chart-wrapper">
+            <canvas id="windForecastChart"></canvas>
+          </div>
+          <div class="wind-directions">
+            <h4>Wind Direction</h4>
+            <div class="direction-container">
+              <div class="direction-day">
+                <span class="day-label">Today</span>
+                <div
+                  class="wind-direction-indicator"
+                  style="transform: rotate(45deg)"
+                >
+                  <i class="fas fa-arrow-up"></i>
+                </div>
+                <span class="direction-label">NE</span>
+              </div>
+              <div class="direction-day">
+                <span class="day-label">Tomorrow</span>
+                <div
+                  class="wind-direction-indicator"
+                  style="transform: rotate(90deg)"
+                >
+                  <i class="fas fa-arrow-up"></i>
+                </div>
+                <span class="direction-label">E</span>
+              </div>
+              <div class="direction-day">
+                <span class="day-label">+2 days</span>
+                <div
+                  class="wind-direction-indicator"
+                  style="transform: rotate(135deg)"
+                >
+                  <i class="fas fa-arrow-up"></i>
+                </div>
+                <span class="direction-label">SE</span>
+              </div>
+              <div class="direction-day">
+                <span class="day-label">+3 days</span>
+                <div
+                  class="wind-direction-indicator"
+                  style="transform: rotate(180deg)"
+                >
+                  <i class="fas fa-arrow-up"></i>
+                </div>
+                <span class="direction-label">S</span>
+              </div>
+              <div class="direction-day">
+                <span class="day-label">+4 days</span>
+                <div
+                  class="wind-direction-indicator"
+                  style="transform: rotate(225deg)"
+                >
+                  <i class="fas fa-arrow-up"></i>
+                </div>
+                <span class="direction-label">SW</span>
+              </div>
+              <div class="direction-day">
+                <span class="day-label">+5 days</span>
+                <div
+                  class="wind-direction-indicator"
+                  style="transform: rotate(270deg)"
+                >
+                  <i class="fas fa-arrow-up"></i>
+                </div>
+                <span class="direction-label">W</span>
+              </div>
+              <div class="direction-day">
+                <span class="day-label">+6 days</span>
+                <div
+                  class="wind-direction-indicator"
+                  style="transform: rotate(315deg)"
+                >
+                  <i class="fas fa-arrow-up"></i>
+                </div>
+                <span class="direction-label">NW</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="daily-forecast">
+      <div class="container">
+        <h2 class="section-title">7-Day Forecast</h2>
+        <div class="forecast-cards">
+          <div class="forecast-card today">
+            <div class="forecast-day">Today</div>
+            <div class="forecast-date">Mar 30</div>
+            <div class="forecast-icon">
+              <i class="fas fa-sun"></i>
+            </div>
+            <div class="forecast-temp">
+              <span class="max-temp">32°C</span>
+              <span class="min-temp">22°C</span>
+            </div>
+            <div class="forecast-condition">Sunny</div>
+            <div class="forecast-precipitation">
+              <i class="fas fa-tint"></i> 0%
+            </div>
+          </div>
+          <div class="forecast-card">
+            <div class="forecast-day">Tomorrow</div>
+            <div class="forecast-date">Mar 31</div>
+            <div class="forecast-icon">
+              <i class="fas fa-cloud-sun"></i>
+            </div>
+            <div class="forecast-temp">
+              <span class="max-temp">30°C</span>
+              <span class="min-temp">21°C</span>
+            </div>
+            <div class="forecast-condition">Partly Cloudy</div>
+            <div class="forecast-precipitation">
+              <i class="fas fa-tint"></i> 10%
+            </div>
+          </div>
+          <div class="forecast-card">
+            <div class="forecast-day">Tuesday</div>
+            <div class="forecast-date">Apr 1</div>
+            <div class="forecast-icon">
+              <i class="fas fa-cloud"></i>
+            </div>
+            <div class="forecast-temp">
+              <span class="max-temp">29°C</span>
+              <span class="min-temp">22°C</span>
+            </div>
+            <div class="forecast-condition">Cloudy</div>
+            <div class="forecast-precipitation">
+              <i class="fas fa-tint"></i> 30%
+            </div>
+          </div>
+          <div class="forecast-card">
+            <div class="forecast-day">Wednesday</div>
+            <div class="forecast-date">Apr 2</div>
+            <div class="forecast-icon">
+              <i class="fas fa-cloud-showers-heavy"></i>
+            </div>
+            <div class="forecast-temp">
+              <span class="max-temp">27°C</span>
+              <span class="min-temp">20°C</span>
+            </div>
+            <div class="forecast-condition">Showers</div>
+            <div class="forecast-precipitation">
+              <i class="fas fa-tint"></i> 60%
+            </div>
+          </div>
+          <div class="forecast-card">
+            <div class="forecast-day">Thursday</div>
+            <div class="forecast-date">Apr 3</div>
+            <div class="forecast-icon">
+              <i class="fas fa-cloud-rain"></i>
+            </div>
+            <div class="forecast-temp">
+              <span class="max-temp">25°C</span>
+              <span class="min-temp">19°C</span>
+            </div>
+            <div class="forecast-condition">Rain</div>
+            <div class="forecast-precipitation">
+              <i class="fas fa-tint"></i> 80%
+            </div>
+          </div>
+          <div class="forecast-card">
+            <div class="forecast-day">Friday</div>
+            <div class="forecast-date">Apr 4</div>
+            <div class="forecast-icon">
+              <i class="fas fa-cloud-sun-rain"></i>
+            </div>
+            <div class="forecast-temp">
+              <span class="max-temp">28°C</span>
+              <span class="min-temp">20°C</span>
+            </div>
+            <div class="forecast-condition">Scattered Showers</div>
+            <div class="forecast-precipitation">
+              <i class="fas fa-tint"></i> 50%
+            </div>
+          </div>
+          <div class="forecast-card">
+            <div class="forecast-day">Saturday</div>
+            <div class="forecast-date">Apr 5</div>
+            <div class="forecast-icon">
+              <i class="fas fa-cloud-sun"></i>
+            </div>
+            <div class="forecast-temp">
+              <span class="max-temp">30°C</span>
+              <span class="min-temp">21°C</span>
+            </div>
+            <div class="forecast-condition">Partly Cloudy</div>
+            <div class="forecast-precipitation">
+              <i class="fas fa-tint"></i> 20%
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="weather-alerts">
+      <div class="container">
+        <h2 class="section-title">Weather Alerts</h2>
+        <div class="alert-container">
+          <div class="weather-alert warning">
+            <div class="alert-icon">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="alert-content">
+              <h3>Heavy Rain Warning</h3>
+              <p>
+                Heavy rainfall expected on Wednesday and Thursday (Apr 2-3).
+                Consider delaying any planned fertilizer application.
+              </p>
+              <div class="alert-time">Valid until: Apr 3, 2025</div>
+            </div>
+          </div>
+          <div class="weather-alert info">
+            <div class="alert-icon">
+              <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="alert-content">
+              <h3>Wind Advisory</h3>
+              <p>
+                Moderate to strong winds expected on Tuesday (Apr 1). Not
+                advisable for pesticide spraying.
+              </p>
+              <div class="alert-time">Valid until: Apr 1, 2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-columns">
+          <div class="footer-column">
+            <h3>AgriSense</h3>
+            <p>
+              Smart Soil Health Monitoring System for sustainable and efficient
+              farming.
+            </p>
+          </div>
+          <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="dashboard.html">Dashboard</a></li>
+              <li><a href="weather.html">Weather</a></li>
+              <li><a href="alerts.html">Alerts</a></li>
+              <li><a href="resources.html">Resources</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Contact Us</h3>
+            <p><i class="fas fa-envelope"></i> info@agrisense.com</p>
+            <p><i class="fas fa-phone"></i> +91 9876543210</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 AgriSense. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="./js/weather.js"></script>
+  </body>
+</html>
